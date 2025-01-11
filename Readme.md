@@ -4,7 +4,7 @@ This is a simple go package to generate a form for authentication in swagger.
 
 ## Usage
 
-Example of using this package in a Go Fiber app. You can find the full code here.
+Example of using this package in a Go Fiber app. You can find the full code over https://github.com/schmentle/swagger-auth-example.
 
 ```go  
 import (
