@@ -37,35 +37,25 @@ func main() {
     if authApiUrl == "" {
         authApiUrl = "/auth"
     }
-
-    app.Get("/config", func(c *fiber.Ctx) error {
-        return Config(c, swaggerDocURL, authApiUrl)
-    })
-	
     ...
 
     app.Get("/swagger/doc.json", func(c *fiber.Ctx) error {
         return c.SendFile("./docs/swagger.json")
     })
-    
-    app.Get("/swagger/*", adaptor.HTTPHandler(http.StripPrefix("/swagger/", swagger.ServeSwaggerUI())))
 
+    app.Get("/swagger/*", adaptor.HTTPHandler(swagger.ServeSwaggerUI(swagger.SwaggerConfig{
+        SwaggerDocURL: swaggerDocURL,
+        AuthURL:       authApiUrl,
+    })))
 }
 ```
 
 Example screenshot of the form generated:
 
-![Local image](./images/swagger-auth-login-form-example.png)
+![Local image](./images/b6563fee-2455-4b00-808e-f0d64828d717.gif)
 
 ## Notes
-1. `/config` - to get the configuration for the form which will pass in the auth url and swagger doc url
-    The swagger form is expecting payloads in the following format:
-    ```json
-    {
-        "authUrl": "/api/auth",
-        "swaggerDocUrl": "/swagger/doc.json"
-    }
-    ```
+1. The package requires the swagger doc url and the auth url.
    If none is supplied or configured, the default values will be used i.e. `/auth` and `/swagger/doc.json`.
 2. This package doesn't handle authentication. You will need to implement your own authentication logic.
 3. You need to add your swagger annotations for your endpoints and generate the files as needed `swag init` in your project.
